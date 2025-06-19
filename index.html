@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Pantalla de Ingreso</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background: #f0f0f0;
+      padding: 50px;
+    }
+    select, button {
+      padding: 10px;
+      font-size: 16px;
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Selecciona un Funcionario</h2>
+
+<select id="nombreSelect">
+  <option value="">-- Selecciona --</option>
+  <option>Acosta</option>
+  <option>Agudelo</option>
+  <option>Arevalo</option>
+  <option>Bermudez</option>
+  <option>Bernate</option>
+  <option>Paula</option>
+  <option>Emily</option>
+  <option>Cortes</option>
+  <option>Cuero</option>
+  <option>Aura</option>
+  <option>Andrea I.</option>
+  <option>Marrugo</option>
+  <option>Muñoz</option>
+  <option>Natalia N.</option>
+  <option>Dayana</option>
+  <option>Oviedo</option>
+  <option>Monica</option>
+  <option>Pantoja</option>
+  <option>Parrado</option>
+  <option>Payares</option>
+  <option>Penagos</option>
+  <option>Peña</option>
+  <option>Perdomo</option>
+  <option>Natalia</option>
+  <option>Claudia</option>
+  <option>Roncancio</option>
+  <option>Valentina</option>
+  <option>Andrea S.</option>
+  <option>Socarras</option>
+  <option>Solarte</option>
+  <option>Yuliana</option>
+</select>
+
+<br>
+
+<button onclick="ingresar()">Ingresar</button>
+
+<script>
+  function ingresar() {
+    const seleccionado = document.getElementById("nombreSelect").value;
+    if (seleccionado === "") {
+      alert("Por favor selecciona un funcionario.");
+      return;
+    }
+
+    // Leer conectados actuales
+    const conectados = JSON.parse(localStorage.getItem("conectados")) || [];
+
+    // Agregar nuevo si no está
+    if (!conectados.includes(seleccionado)) {
+      conectados.push(seleccionado);
+      localStorage.setItem("conectados", JSON.stringify(conectados));
+    }
+
+    // Abrir pantalla de círculos
+    window.open("untitled-1.html", "_blank");
+  }
+</script>
+
+</body>
+</html>

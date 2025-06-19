@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>31 Círculos Funcionarios</title>
+  <style>
+    body {
+      background: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      position: relative;
+      width: 1000px;
+      height: 520px;
+      margin-top: 10px;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    .item {
+      position: absolute;
+      text-align: center;
+      transform: translate(-50%, -50%);
+    }
+    .circle {
+      width: 50px;
+      height: 50px;
+      background: #55fa4faf;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: rgb(34, 0, 0);
+      font-size: 16px;
+      margin: 0 auto 6px auto;
+      transition: background 0.3s;
+    }
+    .name-label {
+      font-size: 12px;
+      font-family: sans-serif;
+      color: #333;
+      max-width: 80px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .footer {
+      position: absolute;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: sans-serif;
+      font-size: 14px;
+      color: #555;
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+    .footer button {
+      padding: 6px 14px;
+      border: none;
+      background: #007BFF;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .footer button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container" id="semicircle">
+  <div class="footer">
+    <button onclick="restablecerCirculos()">Restablecer</button>
+    <button onclick="votar()">Votar</button>
+  </div>
+</div>
+
+<script>
+  const container = document.getElementById("semicircle");
+  const centerX = 500;
+  const centerY = 463;
+
+  const nombres = [
+    "Acosta", "Agudelo", "Arevalo", "Bermudez", "Bernate", "Paula", "Emily", "Cortes", "Cuero", "Aura",
+    "Andrea I.", "Marrugo", "Muñoz", "Natalia N.", "Dayana", "Oviedo", "Monica", "Pantoja", "Parrado",
+    "Payares", "Penagos", "Peña", "Perdomo", "Natalia", "Claudia", "Roncancio", "Valentina", "Andrea S.",
+    "Socarras", "Solarte", "Yuliana"
+  ];
+
+  const filas = [
+    { cantidad: 11, radius: 420 },
+    { cantidad: 11, radius: 350 },
+    { cantidad: 9,  radius: 280 }
+  ];
+
+  function pintarCirculos() {
+    container.innerHTML = `
+      <div class="footer">
+        <button onclick="restablecerCirculos()">Restablecer</button>
+        <button onclick="votar()">Votar</button>
+      </div>
+    `;
+
+    const conectados = JSON.parse(localStorage.getItem("conectados")) || [];
+
+    let numero = 0;
+
+    filas.forEach(fila => {
+      for (let i = 0; i < fila.cantidad; i++) {
+        const angle = Math.PI * (i / (fila.cantidad - 1));
+        const x = centerX + fila.radius * Math.cos(angle);
+        const y = centerY - fila.radius * Math.sin(angle);
+
+        const item = document.createElement("div");
+        item.className = "item";
+        item.style.left = `${x}px`;
+        item.style.top = `${y}px`;
+
+        const circle = document.createElement("div");
+        circle.className = "circle";
+        circle.textContent = numero + 1;
+
+        const nombreActual = nombres[numero];
+
+        if (conectados.includes(nombreActual)) {
+          circle.style.background = "black";
+          circle.style.color = "white";
+        }
+
+        const label = document.createElement("div");
+        label.className = "name-label";
+        label.textContent = nombreActual;
+
+        item.appendChild(circle);
+        item.appendChild(label);
+        container.appendChild(item);
+
+        numero++;
+      }
+    });
+  }
+
+  // Función para dejar todos en verde (elimina conectados)
+  function restablecerCirculos() {
+    localStorage.removeItem("conectados");
+    pintarCirculos();
+  }
+
+  // Función votar — redirige a votacion.html
+  function votar() {
+    window.location.href = "votacion.html";
+  }
+
+  // Pintar círculos al iniciar
+  pintarCirculos();
+
+  // Actualizar si cambia localStorage en otra ventana
+  window.addEventListener("storage", () => {
+    pintarCirculos();
+  });
+</script>
+
+</body>
+</html>
+
+

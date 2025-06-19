@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Votación</title>
+  <style>
+    body {
+      font-family: Arial;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background: #f8f9fa;
+      text-align: center;
+    }
+    h1 {
+      font-size: 28px;
+      margin-bottom: 30px;
+    }
+    .pregunta {
+      font-size: 20px;
+      margin-bottom: 40px;
+    }
+    .boton {
+      padding: 15px 30px;
+      font-size: 18px;
+      margin: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      color: #fff;
+      transition: background 0.3s;
+    }
+    .aprobado {
+      background: #2ecc71;
+    }
+    .aprobado:hover {
+      background: #27ae60;
+    }
+    .noaprobado {
+      background: #e74c3c;
+    }
+    .noaprobado:hover {
+      background: #c0392b;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Votación</h1>
+
+  <div class="pregunta">¿Está usted de acuerdo con la propuesta presentada?</div>
+
+  <button class="boton aprobado" onclick="responder('Aprobado')">APROBADO</button>
+  <button class="boton noaprobado" onclick="responder('No Aprobado')">NO APROBADO</button>
+
+  <script>
+    function responder(opcion) {
+      fetch("https://prod-00.westus.logic.azure.com:443/workflows/92848784fa0a4f0189cf86a24515827c/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=sIGBPXRQTKEntJcaAhoYQtoxafu238eCwvWbVJetPXE", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          "respuesta": opcion
+        })
+      })
+      .then(response => {
+        if (response.ok) {
+          return response.text();
+        } else {
+          throw new Error("Error en la solicitud: " + response.status);
+        }
+      })
+      .then(data => {
+        alert("Gracias por participar en la ponencia");
+        window.close();
+      })
+      .catch(error => {
+        alert("Ocurrió un error al enviar la respuesta: " + error);
+      });
+    }
+  </script>
+
+</body>
+</html>
